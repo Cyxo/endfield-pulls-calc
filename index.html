@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Endfield Pulls Calculator</title>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="main.js"></script>
+</head>
+<body class="bg-black">
+    <div class="container-sm p-4">
+        <div class="card bg-dark text-light">
+            <div class="p-3 d-flex flex-column align-items-center gap-3">
+                <h1 class="endfield text-center">Arknights: Endfield Pulls Calculator</h1>
+                <div class="container-smm text-center gap-3">
+                    <p>
+                        Welcome to the pulls calculator and simulator for <b class="endfield">Arknights: Endfield</b>!
+                    </p>
+                    <p>
+                        This tool will help you <b>calculate how many pulls you have</b> with all different currencies,
+                        and give you the <b>chances that you get the current focus character</b> with these pulls!
+                    </p>
+                    
+                    <div class="alert alert-warning d-flex align-items-center" role="alert">
+                        <i class="fa fa-exclamation-triangle" aria-hidden="true" style="font-size: 24px"></i>
+                        <div>
+                            Simulating pulls can be depressing! Remember that you could always get lucky, that a probability is just a number and you can beat it!
+                        </div>
+                    </div>
+
+                    <h2>Pulls count</h2>
+                    <div class="card d-flex text-start p-4 bg-white bg-opacity-10 text-light gap-3" id="pullsCount">
+                        <div class="d-flex flex-row align-items-center gap-1 mt-2">
+                            <i class="ic ic-hh-permit"></i>
+                            <span class="fs-4 fw-bold">Charted HH Permits</span>
+                        </div>
+                        <input class="bg-dark text-light border-warning" type="number" id="hh-permit" min="0" value="17">
+                        <div class="d-flex flex-row align-items-center gap-1 mt-2">
+                            <i class="ic ic-nhz-permit"></i>
+                            <span class="fs-4 fw-bold"><span class="pulls-name">Firewalker's Trail</span> Permits</span>
+                        </div>
+                        <input class="bg-dark text-light border-warning" type="number" id="nhz-permit" min="0" value="5">
+                        <div class="d-flex flex-row align-items-center gap-1 mt-2">
+                            <i class="ic ic-nhz-10-permit"></i>
+                            <span class="fs-4 fw-bold"><span class="pulls-name">Firewalker's Trail</span> 10×Permits</span>
+                        </div>
+                        <input class="bg-dark text-light border-warning" type="number" id="nhz-10-permit" min="0" value="0">
+                        <div class="d-flex flex-row align-items-center gap-1 mt-2">
+                            <i class="ic ic-origeometry"></i>
+                            <span class="fs-4 fw-bold">Origeometry</span>
+                        </div>
+                        <input class="bg-dark text-light border-warning" type="number" id="origeometry" min="0" value="34">
+                        <div class="flex d-flex flex-row gap-3 justify-content-center flex-wrap">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="origeometryRadio" id="convertAllOri">
+                                <label class="form-check-label" for="convertAllOri">
+                                    Convert all Origeometry to pulls
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="origeometryRadio" id="keepOriBP" checked>
+                                <label class="form-check-label" for="keepOriBP">
+                                    Keep 29 Origeometry (for BP)
+                                </label>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-row align-items-center gap-1 mt-2">
+                            <i class="ic ic-oroberyl"></i>
+                            <span class="fs-4 fw-bold">Oroberyl</span>
+                        </div>
+                        <input class="bg-dark text-light border-warning" type="number" id="oroberyl" min="0" value="18175">
+                        <h3 class="mt-4 fw-bold">Total pulls:</h3>
+                        <div class="card bg-dark text-light w-50 m-auto p-3 d-flex flex-row justify-content-center align-items-center gap-1 fs-4 mb-3">
+                            <i class="ic ic-hh-permit"></i>
+                            You can do
+                            <span class="fw-bold" id="totalPulls">0</span>
+                            pulls
+                        </div>
+                    </div>
+                    <h2 class="mt-5">Pulls simulator</h2>
+                    <div class="card d-flex align-items-start p-4 bg-white bg-opacity-10 text-light gap-3" id="pullsSim">
+                        <div class="d-flex flex-column align-items-start gap-1 mt-2">
+                            <span class="fs-4 fw-bold mb-2">Select banner:</span>
+                            <select id="banner" class="bg-dark text-light border-warning"></select>
+                        </div>
+                        <div class="card bg-dark w-100 text-start text-light mb-3 mt-2">
+                            <div class="row g-0">
+                                <div class="col-md-3">
+                                    <img src="img/char/Laevatain.webp" class="uprate-icon img-fluid rounded-start" />
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="card-body p-3">
+                                        <h5 class="card-title banner-name mb-4">Scars of the Forge</h5>
+                                        <p class="card-text">
+                                            <b class="banner-name">Scars of the Forge</b> is a limited-time banner in <b class="endfield">Endfield</b>.
+                                            The focus <b class="text-nowrap">6★ character</b> is
+                                            <span class="text-nowrap"><img class="char-icon uprate-icon" src="img/char/Laevatain.webp"/> <b class="uprate-char">Laevatain</b></span>.
+                                            If you lose your <b class="text-nowrap">50-50</b>, you can get any of the following characters: <span id="otherChars"></span>.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-column align-items-start gap-1 mt-2">
+                            <span class="fs-4 fw-bold mb-2">Current pity:</span>
+                            <div class="d-flex flex-row gap-2 w-100">
+                                <input class="border-warning bg-dark text-light flex-grow-1" id="pity" type="number" min="0" max="79" value="0">
+                                <span class="fs-4 fw-bold">/ 80</span>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-column align-items-start gap-1 mt-2 w-100">
+                            <div class="d-flex flex-row align-items-center gap-1 mt-2 mb-2">
+                                <i class="ic ic-hh-permit"></i>
+                                <span class="fs-4 fw-bold">Pulls you will use:</span>
+                            </div>
+                            <input class="border-warning bg-dark text-light w-100" id="pullsToUse" type="number" min="0" max="79" value="0">
+                        </div>
+                        <div class="d-flex flex-column align-items-start gap-1 mt-2 mb-3 w-100">
+                            <span class="fs-4 fw-bold mb-2">How many copies of <b class="uprate-char">Laevatain</b> do you want?</span>
+                            <div class="d-flex flex-row gap-2 w-100">
+                                <img class="uprate-icon" style="height: 2.5rem" src="img/char/Laevatain.webp"/>
+                                <input class="border-warning bg-dark text-light w-100 flex-grow-1" id="charCopies" type="number" min="1" value="1">
+                            </div>
+                        </div>
+                        <div class="accordion accordion-flush w-100 mb-3" id="accordionFlushExample">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="flush-headingOne">
+                                <button class="accordion-button collapsed bg-dark text-light" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                                    Advanced settings...
+                                </button>
+                                </h2>
+                                <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#accordionFlushExample">
+                                    <div class="accordion-body bg-dark text-light">
+                                        <div class="d-flex flex-column align-items-start gap-1 w-100 mb-4">
+                                            <span class="mb-1 fw-bold">Number of simulations to run:</span>
+                                            <input class="border-warning bg-dark text-light w-100" id="nbSimu" type="number" min="1" max="10000" value="1000">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="m-auto">
+                            <button type="button" class="btn btn-warning p-3" id="simulate">
+                                <div class="d-flex flex-row align-items-center gap-2">
+                                    <div class="spinner-border d-none" id="simuLoad" role="status"></div>
+                                    <b>Simulate</b>
+                                </div>
+                            </button>
+                        </div>
+                        <div class="card mt-3 bg-dark text-light p-3 pt-0 w-100 align-items-start d-none" id="pullsRes">
+                            <h3 class="mt-4 fw-bold">Pulls results:</h3>
+                            <div class="mt-2">
+                                <span class="fs-5">Chances to get <b id="numCopies">1 copy</b> of <img class="char-icon uprate-icon" style="margin-top: -3px;" src="img/char/Laevatain.webp"/> <span class="uprate-char fw-bold">Laevatain</span>: <span id="uprateChances" class="fw-bold">3.33%</span></span>
+                            </div>
+                            <div class="mt-3 text-white-50">
+                                <span>Additionally, your chances to obtain other limited characters are:</span>
+                                <ul id="addChars"></ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

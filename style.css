@@ -1,0 +1,100 @@
+@font-face {
+    font-family: "Logik Extended Black";
+    src: url("logik.woff2");
+}
+
+.endfield {
+    font-family: "Logik Extended Black";
+    text-transform: uppercase;
+}
+
+h1.endfield {
+    width: min(100%, 800px);
+}
+
+.col-md-3 > img {
+    object-fit: cover;
+    height: 100%;
+}
+
+.char-icon {
+    width: 1.7rem;
+    margin-top: -0.2rem;
+}
+
+@media (max-width: 768px) {
+    .col-md-3 > img {
+        width: 100%;
+        max-height: 33vw;
+        border-bottom-left-radius: 0 !important;
+        border-top-right-radius: var(--bs-border-radius)!important;
+    }
+    .card-body {
+        text-align: center;
+    }
+}
+
+.accordion-button::after {
+    filter: invert(1);
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number], select {
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 2px;
+    padding: 5px;
+    /* Firefox */
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+
+input:focus, select:focus, .accordion-button:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.container-smm {
+    width: min(100%, 800px);
+}
+
+.ic {
+    display: inline-block;
+    width: 3rem;
+    height: 3rem;
+    vertical-align: middle;
+    background-size: 90%;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin-bottom: -5px;
+    margin-top: -2px;
+    margin-left: -2px;
+}
+
+.ic-hh-permit {
+    background-image: url("img/hh-permit.png");
+    background-size: 100%;
+}
+
+.ic-nhz-permit {
+    background-image: url("img/nhz-permit.png");
+    background-size: 100%;
+}
+
+.ic-nhz-10-permit {
+    background-image: url("img/nhz-10-permit.png");
+}
+
+.ic-origeometry {
+    background-image: url("img/origeometry.png");
+}
+
+.ic-oroberyl {
+    background-image: url("img/oroberyl.png");
+}
