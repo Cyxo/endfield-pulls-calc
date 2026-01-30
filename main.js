@@ -164,6 +164,11 @@ function simulation(initialPity, pulls) {
                 results.offrateDrops += 1;
             }
         }
+        if (results.totalPullsOnBanner == 30) {
+            freeMulti = simulation(0, 10);
+            results.uprateDrops += freeMulti.uprateDrops;
+            results.offrateDrops += freeMulti.offrateDrops;
+        }
     }
 
     return results;
