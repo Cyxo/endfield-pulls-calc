@@ -154,7 +154,7 @@
                                     <div class="accordion-body bg-dark text-light">
                                         <div class="d-flex flex-column align-items-start gap-1 w-100 mb-4">
                                             <span class="mb-1 fw-bold">Number of simulations to run:</span>
-                                            <input class="border-warning bg-dark text-light w-100" id="nbSimu" type="number" min="1" max="10000" value="1000">
+                                            <input class="border-warning bg-dark text-light w-100" id="nbSimu" type="number" min="1" max="1000000" value="500000">
                                         </div>
                                     </div>
                                 </div>
@@ -176,6 +176,15 @@
                             <div class="mt-3 text-white-50">
                                 <span>Additionally, your chances to obtain other limited characters are:</span>
                                 <ul id="addChars"></ul>
+                            </div>
+                            <div class="mt-2 fs-5 d-flex flex-row align-items-center flex-wrap gap-1">
+                                <span class="text-nowrap">You will get an average of</span>
+                                <div class="fw-bold text-nowrap d-flex flex-row align-items-center gap-1">
+                                    <i class="ic ic-arsenal-ticket"></i>
+                                    <span id="weaponPulls"></span>
+                                    <span>Arsenal Tickets</span>
+                                </div>
+                                <span>(for weapon pulls)</span>
                             </div>
                         </div>
                     </div>

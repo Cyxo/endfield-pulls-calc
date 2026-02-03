@@ -47,7 +47,7 @@ input::-webkit-inner-spin-button {
 
 input[type=number], select {
     border-style: solid;
-    border-width: 2px;
+    border-width: 1px;
     border-radius: 2px;
     padding: 5px;
     /* Firefox */
@@ -97,4 +97,8 @@ input:focus, select:focus, .accordion-button:focus {
 
 .ic-oroberyl {
     background-image: url("img/oroberyl.png");
+}
+
+.ic-arsenal-ticket {
+    background-image: url("img/arsenal-ticket.png");
 }

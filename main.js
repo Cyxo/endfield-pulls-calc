@@ -45,9 +45,10 @@ if (model === null) {
         pity: 0,
         pullsToUse: 0,
         charCopies: 1,
-        nbSimu: 1000000
+        nbSimu: 500000
     }
 }
+if (model.nbSimu == 1000000) model.nbSimu = 500000;
 
 function loadData() {
     document.querySelector("#hh-permit").value = model.hhPermits;
@@ -136,7 +137,7 @@ function simulation(initialPity, pulls) {
         totalPullsOnBanner: 0,
         uprateDrops: 0,
         offrateDrops: 0,
-        // weapCurrency: 0
+        weapCurrency: 0
     }
     for (let i = 0; i < pulls; i++) {
         results.totalPullsOnBanner += 1;
@@ -151,10 +152,12 @@ function simulation(initialPity, pulls) {
             // First guarantee
             results.uprateDrops += 1;
             results.pullsToPity = 80;
+            results.weapCurrency += 2000;
         } else if (results.totalPullsOnBanner % 240 === 0) {
             // Free potential
             results.uprateDrops += 1;
         } else if (Math.random() < proba) {
+            results.weapCurrency += 2000;
             results.pullsToPity = 80;
             if (Math.random() > 0.5) {
                 // 50-50 won
@@ -163,6 +166,10 @@ function simulation(initialPity, pulls) {
                 // 50-50 lost
                 results.offrateDrops += 1;
             }
+        } else if (Math.random() < 8/100) {
+            results.weapCurrency += 200;
+        } else {
+            results.weapCurrency += 20;
         }
         if (results.totalPullsOnBanner == 30) {
             freeMulti = simulation(0, 10);
@@ -184,12 +191,14 @@ function runSimulations() {
     setTimeout(() => {
         let nbUprate = 0;
         let nbOffrate = 0;
+        let weapCurrency = 0;
         for (let i = 0; i < model.nbSimu; i++) {
             let res = simulation(model.pity, model.pullsToUse);
             if (res.uprateDrops >= model.charCopies) {
                 nbUprate += 1;
             }
             nbOffrate += res.offrateDrops;
+            weapCurrency += res.weapCurrency;
         }
 
         document.querySelector("#numCopies").innerText = model.charCopies + (model.charCopies > 1 ? " copies" : " copy");
@@ -218,6 +227,8 @@ function runSimulations() {
                 list.appendChild(li);
             }
         }
+        
+        document.querySelector("#weaponPulls").innerText = Math.floor(weapCurrency / model.nbSimu);
 
         document.querySelector("#simuLoad").classList.add("d-none");
         const pullsRes = document.querySelector("#pullsRes");
