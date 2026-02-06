@@ -66,8 +66,8 @@ input:focus, select:focus, .accordion-button:focus {
 
 .ic {
     display: inline-block;
-    width: 3rem;
-    height: 3rem;
+    width: 3em;
+    height: 3em;
     vertical-align: middle;
     background-size: 90%;
     background-position: center;
@@ -101,4 +101,7 @@ input:focus, select:focus, .accordion-button:focus {
 
 .ic-arsenal-ticket {
     background-image: url("img/arsenal-ticket.png");
+    width: 2em;
+    height: 2em;
+    margin-right: -5px;
 }

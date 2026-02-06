@@ -123,16 +123,15 @@
                             </div>
                         </div>
                         <div class="d-flex flex-column align-items-start gap-1 mt-2">
-                            <span class="fs-4 fw-bold mb-2">Current pity:</span>
+                            <span class="fs-4 fw-bold mb-2">Next 6★ guaranteed in:</span>
                             <div class="d-flex flex-row gap-2 w-100">
-                                <input class="border-warning bg-dark text-light flex-grow-1" id="pity" type="number" min="0" max="79" value="0">
-                                <span class="fs-4 fw-bold">/ 80</span>
+                                <input class="border-warning bg-dark text-light flex-grow-1" id="pity" type="number" min="1" max="80" value="80">
+                                <span class="fs-4 fw-bold">pulls</span>
                             </div>
                         </div>
                         <div class="d-flex flex-column align-items-start gap-1 mt-2 w-100">
                             <div class="d-flex flex-row align-items-center gap-1 mt-2 mb-2">
-                                <i class="ic ic-hh-permit"></i>
-                                <span class="fs-4 fw-bold">Pulls you will use:</span>
+                                <span class="fs-4 fw-bold">Total pulls on <b class="uprate-char">Laevatain</b>'s banner:</span>
                             </div>
                             <input class="border-warning bg-dark text-light w-100" id="pullsToUse" type="number" min="0" max="79" value="0">
                         </div>
@@ -178,13 +177,21 @@
                                 <ul id="addChars"></ul>
                             </div>
                             <div class="mt-2 fs-5 d-flex flex-row align-items-center flex-wrap gap-1">
-                                <span class="text-nowrap">You will get an average of</span>
+                                <span class="text-nowrap">You will gain an average of</span>
                                 <div class="fw-bold text-nowrap d-flex flex-row align-items-center gap-1">
                                     <i class="ic ic-arsenal-ticket"></i>
                                     <span id="weaponPulls"></span>
                                     <span>Arsenal Tickets</span>
                                 </div>
                                 <span>(for weapon pulls)</span>
+                            </div>
+                            <div class="mt-1 text-white-50 d-flex flex-row align-items-center flex-wrap gap-1">
+                                <span>Minimum Arsenal Tickets: </span>
+                                <i class="ic ic-arsenal-ticket"></i>
+                                <span id="minWeaponPulls"></span>
+                                <span>; maximum Arsenal Tickets: </span>
+                                <i class="ic ic-arsenal-ticket"></i>
+                                <span id="maxWeaponPulls"></span>
                             </div>
                         </div>
                     </div>

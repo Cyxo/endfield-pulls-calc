@@ -19,7 +19,7 @@ const BANNERS = [
     ),
     new Banner(
         "The Floaty Messenger",
-        "Firewalker's Trail",
+        "Messenger Express",
         "Gilberta",
         ["Laevatain", "Yvonne"]
     ),
@@ -131,9 +131,9 @@ function updateBannerDescription() {
     }
 }
 
-function simulation(initialPity, pulls) {
+function simulation(pullsToPity, pulls) {
     let results = {
-        pullsToPity: 80 - initialPity,
+        pullsToPity: pullsToPity,
         totalPullsOnBanner: 0,
         uprateDrops: 0,
         offrateDrops: 0,
@@ -192,6 +192,7 @@ function runSimulations() {
         let nbUprate = 0;
         let nbOffrate = 0;
         let weapCurrency = 0;
+        let weapCurrencyList = [];
         for (let i = 0; i < model.nbSimu; i++) {
             let res = simulation(model.pity, model.pullsToUse);
             if (res.uprateDrops >= model.charCopies) {
@@ -199,6 +200,7 @@ function runSimulations() {
             }
             nbOffrate += res.offrateDrops;
             weapCurrency += res.weapCurrency;
+            weapCurrencyList.push(res.weapCurrency);
         }
 
         document.querySelector("#numCopies").innerText = model.charCopies + (model.charCopies > 1 ? " copies" : " copy");
@@ -227,8 +229,11 @@ function runSimulations() {
                 list.appendChild(li);
             }
         }
-        
+
         document.querySelector("#weaponPulls").innerText = Math.floor(weapCurrency / model.nbSimu);
+        weapCurrencyList.sort((a, b) => a - b);
+        document.querySelector("#minWeaponPulls").innerText = weapCurrencyList[0];
+        document.querySelector("#maxWeaponPulls").innerText = Math.floor(weapCurrencyList.slice(-100).reduce((a, b) => a + b) / 100);
 
         document.querySelector("#simuLoad").classList.add("d-none");
         const pullsRes = document.querySelector("#pullsRes");
