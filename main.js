@@ -12,12 +12,6 @@ class Banner {
 
 const BANNERS = [
     new Banner(
-        "Scars of the Forge",
-        "Firewalker's Trail",
-        "Laevatain",
-        ["Gilberta", "Yvonne"]
-    ),
-    new Banner(
         "The Floaty Messenger",
         "Messenger Express",
         "Gilberta",
@@ -25,6 +19,12 @@ const BANNERS = [
     ),
     new Banner(
         "Scars of the Forge",
+        "Firewalker's Trail",
+        "Laevatain",
+        ["Gilberta", "Yvonne"]
+    ),
+    new Banner(
+        "Hues of Passion",
         "Firewalker's Trail",
         "Yvonne",
         ["Laevatain", "Gilberta"]
@@ -45,10 +45,18 @@ if (model === null) {
         pity: 0,
         pullsToUse: 0,
         charCopies: 1,
-        nbSimu: 500000
+        nbSimu: 500000,
+        simuWeap: true,
+        arsenalTickets: 5180,
+        usePullsTickets: true,
+        weapCopies: 1,
     }
 }
 if (model.nbSimu == 1000000) model.nbSimu = 500000;
+if (model.simuWeap === undefined) model.simuWeap = true;
+if (model.arsenalTickets === undefined) model.arsenalTickets = 5180;
+if (model.usePullsTickets === undefined) model.usePullsTickets = true;
+if (model.weapCopies === undefined) model.weapCopies = 1;
 
 function loadData() {
     document.querySelector("#hh-permit").value = model.hhPermits;
@@ -66,10 +74,16 @@ function loadData() {
         document.querySelector("#banner").appendChild(opt);
     }
     document.querySelector("#banner").value = model.selectedBann;
-    document.querySelector("#pity").value = model.pity;
+    document.querySelector("#pity").value = (model.pity > 0 ? model.pity : 80);
     document.querySelector("#pullsToUse").value = model.pullsToUse;
     document.querySelector("#charCopies").value = model.charCopies;
     document.querySelector("#nbSimu").value = model.nbSimu;
+
+    document.querySelector("#simuWeap").checked = model.simuWeap;
+    toggleWeapPulls();
+    document.querySelector("#arsenalTickets").value = model.arsenalTickets;
+    document.querySelector("#usePullsTickets").checked = model.usePullsTickets;
+    document.querySelector("#weapCopies").value = model.weapCopies;
 }
 
 function saveData() {
@@ -85,6 +99,11 @@ function saveData() {
     model.pullsToUse = parseInt(document.querySelector("#pullsToUse").value);
     model.charCopies = parseInt(document.querySelector("#charCopies").value);
     model.nbSimu = parseInt(document.querySelector("#nbSimu").value);
+
+    model.simuWeap = document.querySelector("#simuWeap").checked;
+    model.arsenalTickets = parseInt(document.querySelector("#arsenalTickets").value);
+    model.usePullsTickets = document.querySelector("#usePullsTickets").checked;
+    model.weapCopies = parseInt(document.querySelector("#weapCopies").value);
 
     localStorage.setItem("efpSave", JSON.stringify(model));
 }
@@ -108,6 +127,7 @@ function updateBannerDescription() {
     const bann = BANNERS.find(b => b.uprateChar == model.selectedBann);
     document.querySelectorAll(".pulls-name").forEach(el => el.innerText = bann.pullsName);
     document.querySelectorAll(".uprate-icon").forEach(el => el.src = `img/char/${bann.uprateChar}.webp`);
+    document.querySelectorAll(".uprate-weap").forEach(el => el.src = `img/weap/${bann.uprateChar}.png`);
     document.querySelectorAll(".banner-name").forEach(el => el.innerText = bann.name);
     document.querySelectorAll(".uprate-char").forEach(el => el.innerText = bann.uprateChar);
     otherChars = document.querySelector("#otherChars");
@@ -131,17 +151,67 @@ function updateBannerDescription() {
     }
 }
 
+function weapSimulation(boxes) {
+    let results = {
+        pullsToPity: 40,
+        totalPullsOnBanner: 0,
+        uprateDrops: 0,
+        offrateDrops: 0
+    }
+    for (let i = 0; i < boxes; i++) {
+        for (let j = 0; j < 10; j++) {
+            results.totalPullsOnBanner += 1;
+            results.pullsToPity -= 1
+            results.pullsToTen -= 1
+            let proba = 4 / 100;
+            if (results.pullsToPity === 0) {
+                proba = 1;
+            } else if (results.pullsToPity < 10) {
+                proba += (10 - model.pullsToPity) * 5 / 100;
+            }
+            if (results.totalPullsOnBanner == 80 && results.uprateDrops === 0) {
+                // First guarantee
+                results.uprateDrops += 1;
+                results.pullsToPity = 40;
+            } else if (results.totalPullsOnBanner > 100 && (results.totalPullsOnBanner - 100) % 80 === 0) {
+                // Alternates between rate-up & selector
+                if ((results.totalPullsOnBanner - 100) % 160 === 0)
+                    results.uprateDrops += 1;
+                else
+                    results.offrateDrops += 1;
+            } else if (Math.random() < proba) {
+                results.pullsToPity = 40;
+                if (Math.random() < 0.25) {
+                    // 25-75 won
+                    results.uprateDrops += 1;
+                } else {
+                    // 25-75 lost
+                    results.offrateDrops += 1;
+                }
+            }
+        }
+        if (results.uprateDrops >= model.weapCopies)
+            break;
+    }
+
+    return results;
+}
+
 function simulation(pullsToPity, pulls) {
+    pullsToPity = Math.min(80, Math.max(1, pullsToPity));
     let results = {
         pullsToPity: pullsToPity,
+        pullsToTen: 10,
         totalPullsOnBanner: 0,
         uprateDrops: 0,
         offrateDrops: 0,
-        weapCurrency: 0
+        weapCurrency: 0,
+        weapBoxes: 0
     }
     for (let i = 0; i < pulls; i++) {
         results.totalPullsOnBanner += 1;
         results.pullsToPity -= 1
+        results.pullsToTen -= 1
         let proba = 0.8 / 100;
         if (results.pullsToPity === 0) {
             proba = 1;
@@ -166,8 +236,9 @@ function simulation(pullsToPity, pulls) {
                 // 50-50 lost
                 results.offrateDrops += 1;
             }
-        } else if (Math.random() < 8/100) {
+        } else if (Math.random() < 8/100 || results.pullsToTen <= 0) {
             results.weapCurrency += 200;
+            results.pullsToTen = 10
         } else {
             results.weapCurrency += 20;
         }
@@ -203,6 +274,32 @@ function runSimulations() {
             weapCurrencyList.push(res.weapCurrency);
         }
 
+        let weapBoxes = 0;
+        let uprateWeaps = 0;
+        let minOffrateWeaps = Infinity;
+        let maxOffrateWeaps = 0;
+        if (model.simuWeap) {
+            for (let i = 0; i < model.nbSimu; i++) {
+                let tickets = model.arsenalTickets;
+                if (model.usePullsTickets) {
+                    tickets += Math.floor(weapCurrency / model.nbSimu);
+                }
+                weapBox = Math.floor(tickets / 1980);
+                weapBoxes += weapBox;
+                let weapRes = weapSimulation(weapBox);
+                if (weapRes.uprateDrops >= model.weapCopies) {
+                    uprateWeaps += 1;
+                }
+                if (weapRes.offrateDrops < minOffrateWeaps) {
+                    minOffrateWeaps = weapRes.offrateDrops;
+                }
+                if (weapRes.offrateDrops > maxOffrateWeaps) {
+                    maxOffrateWeaps = weapRes.offrateDrops;
+                }
+            }
+        }
+        weapBoxes = Math.floor(weapBoxes / model.nbSimu);
+
         document.querySelector("#numCopies").innerText = model.charCopies + (model.charCopies > 1 ? " copies" : " copy");
         document.querySelector("#uprateChances").innerText = (nbUprate / model.nbSimu * 100).toFixed(2) + "%";
 
@@ -233,7 +330,13 @@ function runSimulations() {
         document.querySelector("#weaponPulls").innerText = Math.floor(weapCurrency / model.nbSimu);
         weapCurrencyList.sort((a, b) => a - b);
         document.querySelector("#minWeaponPulls").innerText = weapCurrencyList[0];
-        document.querySelector("#maxWeaponPulls").innerText = Math.floor(weapCurrencyList.slice(-100).reduce((a, b) => a + b) / 100);
+        document.querySelector("#maxWeaponPulls").innerText = Math.floor(weapCurrencyList.slice(-100).reduce((a, b) => a + b) / Math.min(100, weapCurrencyList.length));
+
+        document.querySelector("#numBoxes").innerText = weapBoxes + (weapBoxes > 1 ? " boxes" : " box");
+        document.querySelector("#numWeap").innerText = model.weapCopies + (model.weapCopies > 1 ? " copies" : " copy");
+        document.querySelector("#weapChances").innerText = (uprateWeaps / model.nbSimu * 100).toFixed(2) + "%";
+        document.querySelector("#minOffWeap").innerText = minOffrateWeaps;
+        document.querySelector("#maxOffWeap").innerText = maxOffrateWeaps;
 
         document.querySelector("#simuLoad").classList.add("d-none");
         const pullsRes = document.querySelector("#pullsRes");
@@ -242,6 +345,19 @@ function runSimulations() {
     }, 100);
 }
 
+function toggleWeapPulls() {
+    enabled = document.querySelector("#simuWeap").checked;
+    document.querySelectorAll('#weaponPullsAccordion input:not(#simuWeap)').forEach(e => e.disabled = !enabled);
+
+    if (!enabled) {
+        new bootstrap.Collapse("#flush-collapseWeapon", {
+            toggle: false
+        }).hide();
+        document.querySelector("#weapResults").classList.add("d-none");
+    } else {
+        document.querySelector("#weapResults").classList.remove("d-none");
+    }
+}
 
 window.addEventListener("load", () => {
     loadData();
@@ -257,4 +373,5 @@ window.addEventListener("load", () => {
     document.querySelector("#banner").addEventListener("change", updateBannerDescription);
     document.querySelectorAll("#pullsSim input").forEach((el) => el.addEventListener("change", saveData));
     document.querySelector("#simulate").addEventListener("click", runSimulations);
+    document.querySelector("#simuWeap").addEventListener("change", toggleWeapPulls);
 });
