@@ -47,14 +47,14 @@ if (model === null) {
         charCopies: 1,
         nbSimu: 500000,
         simuWeap: true,
-        arsenalTickets: 5180,
+        arsenalTickets: 0,
         usePullsTickets: true,
         weapCopies: 1,
     }
 }
 if (model.nbSimu == 1000000) model.nbSimu = 500000;
 if (model.simuWeap === undefined) model.simuWeap = true;
-if (model.arsenalTickets === undefined) model.arsenalTickets = 5180;
+if (model.arsenalTickets === undefined) model.arsenalTickets = 0;
 if (model.usePullsTickets === undefined) model.usePullsTickets = true;
 if (model.weapCopies === undefined) model.weapCopies = 1;
 
