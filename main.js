@@ -139,6 +139,7 @@ function updateBannerDescription() {
         let charIcon = document.createElement("img");
         charIcon.src = `img/char/${char}.webp`;
         charIcon.className = "char-icon";
+        charIcon.alt = "character icon";
         span.appendChild(charIcon);
         span.innerHTML += " ";
         let charName = document.createElement("b");
@@ -314,6 +315,7 @@ function runSimulations() {
                 let charIcon = document.createElement("img");
                 charIcon.src = `img/char/${char}.webp`;
                 charIcon.className = "char-icon";
+                charIcon.alt = "character icon";
                 li.appendChild(charIcon);
                 li.innerHTML += " ";
                 let charName = document.createElement("b");
