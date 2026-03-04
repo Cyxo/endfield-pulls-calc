@@ -12,6 +12,12 @@ class Banner {
 
 const BANNERS = [
     new Banner(
+        "Hues of Passion",
+        "Firewalker's Trail",
+        "Yvonne",
+        ["Laevatain", "Gilberta"]
+    ),
+    new Banner(
         "The Floaty Messenger",
         "Messenger Express",
         "Gilberta",
@@ -22,12 +28,6 @@ const BANNERS = [
         "Firewalker's Trail",
         "Laevatain",
         ["Gilberta", "Yvonne"]
-    ),
-    new Banner(
-        "Hues of Passion",
-        "Firewalker's Trail",
-        "Yvonne",
-        ["Laevatain", "Gilberta"]
     ),
 ]
 
