@@ -12,6 +12,18 @@ class Banner {
 
 const BANNERS = [
     new Banner(
+        "River's Daughter",
+        "Limited x10",
+        "Tangtang",
+        ["Yvonne", "Gilberta"]
+    ),
+    new Banner(
+        "Wolf Pearl",
+        "Limited x10",
+        "Rossi",
+        ["Tangtang", "Yvonne"]
+    ),
+    new Banner(
         "Hues of Passion",
         "Firewalker's Trail",
         "Yvonne",
