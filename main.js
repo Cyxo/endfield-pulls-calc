@@ -12,14 +12,20 @@ class Banner {
 
 const BANNERS = [
     new Banner(
+        "Thunder of Renewal",
+        "Blitz of Verdance",
+        "Zhuang Fangyi",
+        ["Rossi", "Tangtang"]
+    ),
+    new Banner(
         "Wolf Pearl",
-        "Limited x10",
+        "Limited",
         "Rossi",
         ["Tangtang", "Yvonne"]
     ),
     new Banner(
         "River's Daughter",
-        "Limited x10",
+        "Limited",
         "Tangtang",
         ["Yvonne", "Gilberta"]
     ),
