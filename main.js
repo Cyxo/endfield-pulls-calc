@@ -2,51 +2,78 @@
 const STANDARD = ["Ardelia", "Ember", "Last Rite", "Lifeng", "Pogranichnik"]
 
 class Banner {
-    constructor (name, pullsName, uprateChar, otherChars) {
+    constructor (name, pullsName, uprateChar) {
         this.name = name;
         this.pullsName = pullsName;
         this.uprateChar = uprateChar;
+        this.uprateChance = 0.5;
+    }
+}
+
+class TargetOperatorBanner extends Banner {
+    constructor (name, pullsName, uprateChar, otherChars) {
+        super(name, pullsName, uprateChar);
         this.otherChars = otherChars.concat(STANDARD);
     }
 }
 
+class MultiRerunBanner extends Banner {
+    constructor (name, pullsName, uprateChar, otherChars) {
+        super(name, pullsName, uprateChar);
+        this.otherChars = otherChars;
+        this.uprateChance = 0.25;
+    }
+}
+
 const BANNERS = [
-    new Banner(
+    new MultiRerunBanner(
+        "Fest of Brillance",
+        "Shimmering Moment",
+        "Gilberta",
+        ["Laevatain", "Ardelia", "Pogranichnik"]
+    ),
+    new MultiRerunBanner(
+        "Fest of Brillance",
+        "Shimmering Moment",
+        "Laevatain",
+        ["Gilberta", "Ardelia", "Pogranichnik"]
+    ),
+    new TargetOperatorBanner(
         "Thunder of Renewal",
         "Blitz of Verdance",
         "Zhuang Fangyi",
         ["Rossi", "Tangtang"]
     ),
-    new Banner(
-        "Wolf Pearl",
-        "Limited",
-        "Rossi",
-        ["Tangtang", "Yvonne"]
-    ),
-    new Banner(
-        "River's Daughter",
-        "Limited",
-        "Tangtang",
-        ["Yvonne", "Gilberta"]
-    ),
-    new Banner(
-        "Hues of Passion",
-        "Firewalker's Trail",
-        "Yvonne",
-        ["Laevatain", "Gilberta"]
-    ),
-    new Banner(
-        "The Floaty Messenger",
-        "Messenger Express",
-        "Gilberta",
-        ["Laevatain", "Yvonne"]
-    ),
-    new Banner(
-        "Scars of the Forge",
-        "Firewalker's Trail",
-        "Laevatain",
-        ["Gilberta", "Yvonne"]
-    ),
+    // new TargetOperatorBanner(
+    //     "Wolf Pearl",
+    //     "Limited",
+    //     "Rossi",
+    //     ["Tangtang", "Yvonne"]
+    // ),
+    // new TargetOperatorBanner(
+    //     "River's Daughter",
+    //     "Limited",
+    //     "Tangtang",
+    //     ["Yvonne", "Gilberta"]
+    // ),
+    // new TargetOperatorBanner(
+    //     "Hues of Passion",
+    //     "Firewalker's Trail",
+    //     "Yvonne",
+    //     ["Laevatain", "Gilberta"]
+    // ),
+    // new TargetOperatorBanner(
+    //     "The Floaty Messenger",
+    //     "Messenger Express",
+    //     "Gilberta",
+    //     ["Laevatain", "Yvonne"]
+    // ),
+    // new TargetOperatorBanner(
+    //     "Scars of the Forge",
+    //     "Firewalker's Trail",
+    //     "Laevatain",
+    //     ["Gilberta", "Yvonne"]
+    // ),
 ]
 
 
@@ -85,12 +112,16 @@ function loadData() {
     document.querySelector("#convertAllOri").checked = !model.oriBP;
     document.querySelector("#oroberyl").value = model.oroberyl;
 
+    availBanns = [];
     for (let bann of BANNERS) {
         opt = document.createElement("option");
         opt.value = bann.uprateChar;
         opt.innerText = bann.uprateChar + " - " + bann.name;
         document.querySelector("#banner").appendChild(opt);
+        availBanns.push(bann.uprateChar);
     }
+    if (!availBanns.includes(model.selectedBann))
+        model.selectedBann = BANNERS[0].uprateChar;
     document.querySelector("#banner").value = model.selectedBann;
     document.querySelector("#pity").value = (model.pity > 0 ? model.pity : 80);
     document.querySelector("#pullsToUse").value = model.pullsToUse;
@@ -216,7 +247,7 @@ function weapSimulation(boxes) {
     return results;
 }
 
-function simulation(pullsToPity, pulls) {
+function simulation(banner, pullsToPity, pulls) {
     pullsToPity = Math.min(80, Math.max(1, pullsToPity));
     let results = {
         pullsToPity: pullsToPity,
@@ -248,7 +279,7 @@ function simulation(pullsToPity, pulls) {
         } else if (Math.random() < proba) {
             results.weapCurrency += 2000;
             results.pullsToPity = 80;
-            if (Math.random() > 0.5) {
+            if (Math.random() < banner.uprateChance) {
                 // 50-50 won
                 results.uprateDrops += 1;
             } else {
@@ -262,7 +293,7 @@ function simulation(pullsToPity, pulls) {
             results.weapCurrency += 20;
         }
         if (results.totalPullsOnBanner == 30) {
-            freeMulti = simulation(0, 10);
+            freeMulti = simulation(banner, 0, 10);
             results.uprateDrops += freeMulti.uprateDrops;
             results.offrateDrops += freeMulti.offrateDrops;
         }
@@ -278,13 +309,15 @@ function runSimulations() {
     document.querySelector("#simuLoad").classList.remove("d-none");
     document.querySelector("#pullsRes").classList.add("d-none");
 
+    const bann = BANNERS.find(b => b.uprateChar == model.selectedBann);
+
     setTimeout(() => {
         let nbUprate = 0;
         let nbOffrate = 0;
         let weapCurrency = 0;
         let weapCurrencyList = [];
         for (let i = 0; i < model.nbSimu; i++) {
-            let res = simulation(model.pity, model.pullsToUse);
+            let res = simulation(bann, model.pity, model.pullsToUse);
             if (res.uprateDrops >= model.charCopies) {
                 nbUprate += 1;
             }
@@ -322,7 +355,6 @@ function runSimulations() {
         document.querySelector("#numCopies").innerText = model.charCopies + (model.charCopies > 1 ? " copies" : " copy");
         document.querySelector("#uprateChances").innerText = (nbUprate / model.nbSimu * 100).toFixed(2) + "%";
 
-        const bann = BANNERS.find(b => b.uprateChar == model.selectedBann);
         const offChance = nbOffrate / model.nbSimu / bann.otherChars.length * 100;
         let list = document.querySelector("#addChars");
         list.innerHTML = "";
