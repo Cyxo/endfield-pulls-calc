@@ -26,24 +26,36 @@ class MultiRerunBanner extends Banner {
 }
 
 const BANNERS = [
-    new MultiRerunBanner(
-        "Fest of Brillance",
-        "Shimmering Moment",
-        "Gilberta",
-        ["Laevatain", "Ardelia", "Pogranichnik"]
-    ),
-    new MultiRerunBanner(
-        "Fest of Brillance",
-        "Shimmering Moment",
-        "Laevatain",
-        ["Gilberta", "Ardelia", "Pogranichnik"]
+    new TargetOperatorBanner(
+        "Fists of No Regrets",
+        "One with Her Fists",
+        "Mi Fu",
+        ["Zhuang Fangyi", "Rossi"]
     ),
     new TargetOperatorBanner(
-        "Thunder of Renewal",
-        "Blitz of Verdance",
-        "Zhuang Fangyi",
-        ["Rossi", "Tangtang"]
+        "Expunger of Sin",
+        "Pacekeeper's Nocturne",
+        "Camille",
+        ["Mi Fu", "Zhuang Fangyi"]
     ),
+    // new MultiRerunBanner(
+    //     "Fest of Brillance",
+    //     "Shimmering Moment",
+    //     "Gilberta",
+    //     ["Laevatain", "Ardelia", "Pogranichnik"]
+    // ),
+    // new MultiRerunBanner(
+    //     "Fest of Brillance",
+    //     "Shimmering Moment",
+    //     "Laevatain",
+    //     ["Gilberta", "Ardelia", "Pogranichnik"]
+    // ),
+    // new TargetOperatorBanner(
+    //     "Thunder of Renewal",
+    //     "Blitz of Verdance",
+    //     "Zhuang Fangyi",
+    //     ["Rossi", "Tangtang"]
+    // ),
     // new TargetOperatorBanner(
     //     "Wolf Pearl",
     //     "Limited",
